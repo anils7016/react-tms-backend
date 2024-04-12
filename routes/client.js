@@ -7,7 +7,9 @@ import {
   getClientAccounts,
   getClientAccountById,
   insertAccount,
-  updateAccount
+  updateAccount,
+  deleteAccountById,
+  sendEmailFn
 } from "../controllers/client.js";
 import multer from 'multer';
 
@@ -41,5 +43,9 @@ router.get("/clientaccounts", getClientAccounts);
 router.get("/clientaccounts/:id", getClientAccountById);
 router.post("/insertAccount", insertAccount);
 router.put("/updateAccount/:id", updateAccount);
+router.delete("/deleteAccount/:id", deleteAccountById);
+
+router.post("/sendemail", sendEmailFn);
+
 
 export default router;

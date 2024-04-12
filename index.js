@@ -9,6 +9,7 @@ import morgan from "morgan";
 
 import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
+import userRoutes from "./routes/user.js";
 //import managementRoutes from "./routes/management.js";
 //import salesRoutes from "./routes/sales.js";
 
@@ -34,6 +35,7 @@ app.use(cors());
 // Routes
 app.use( "/client", clientRoutes);
 app.use( "/general", generalRoutes);
+app.use( "/user", userRoutes);
 //app.use( "management", managementRoutes);
 //app.use( "sales", salesRoutes);
 

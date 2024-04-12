@@ -2,6 +2,9 @@ import Product from "../models/Product.js";
 import User from "../models/User.js";
 import Clientaccount from "../models/Clientaccount.js";
 
+//import nodemailer from "nodemailer";
+import {sendEmail} from "../helpers/emailHelper.js";
+
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -115,25 +118,46 @@ export const insertAccount = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-export const updateAccount = async (req, res) => {
-  const { id } = req.params;
-  const { accountName, vWebsite, notes } = req.body;
+export const updateAccount = async ({ params: { id }, body }, res) => {
+  const { accountName, vWebsite, notes } = body;
   try {
-    // Find the user by ID and update the details
     const updatedAccount = await Clientaccount.findByIdAndUpdate(
       id,
       { accountName, vWebsite, notes },
       { new: true }
     );
     if (!updatedAccount) {
-      // If the user with the provided ID is not found, return a 404 error
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Account not found" });
     }
-    // Return the updated user
     res.json(updatedAccount);
   } catch (error) {
-    // Handle any errors
-    console.error("Error updating user:", error);
+    console.error("Error updating account:", error);
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+export const deleteAccountById = async (req, res) => {
+  const accountId = req.params.id;
+  try {
+    const deleteAccount = await Clientaccount.findByIdAndDelete(accountId);
+    if (!deleteAccount) {
+      return res.status(400).json({ message: "Account not found" });
+    }
+    res.status(200).end();
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const sendEmailFn = async (req, res) => {
+  const { to, subject, text } = req.body;
+  console.log("req.body", req.body);
+  try {
+    await sendEmail(to, subject, text);
+    res.status(200).send("Email sent successfully");
+  } catch (error) {
+    res.status(500).send("Error sending email");
   }
 };
