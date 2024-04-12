@@ -1,5 +1,5 @@
 import express from "express";
-import {  signUp } from "../controllers/user.js";
+import {  signUp, signIn } from "../controllers/user.js";
 import multer from 'multer';
 
 // Create a router
@@ -22,6 +22,7 @@ const upload = multer({ storage: storage }); // Configure multer to store files 
 //router.get("/customers", getCustomers);
 
 router.post("/signup", signUp);
+router.post("/signin", signIn);
 
 //router.post("/sendemail", sendEmailFn);
 
